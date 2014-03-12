@@ -1,6 +1,5 @@
 <?php namespace Services\Pokemon;
 
-use \Services\Pokemon\PokemonRepository;
 use Illuminate\Support\ServiceProvider;
 
 /**

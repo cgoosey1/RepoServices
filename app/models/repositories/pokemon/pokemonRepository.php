@@ -1,6 +1,7 @@
 <?php namespace Repositories\Pokemon;
 
 use Illuminate\Database\Eloquent\Model;
+use \stdClass;
 
 /**
 * Our pokemon repository, containing commonly used queries
@@ -29,7 +30,7 @@ class PokemonRepository implements PokemonInterface
     */
     public function getPokemonById($pokemonId)
     {
-        return $this->pokemonModel->find($pokemonId);
+        return $this->convertFormat($this->pokemonModel->find($pokemonId));
     }
 
     /**
@@ -45,9 +46,29 @@ class PokemonRepository implements PokemonInterface
         if ($pokemon) 
         {
             // Return first found row
-            return $pokemon->first();
+            return $this->convertFormat($pokemon->first());
         }
         
         return null;
+    }
+    
+    /**
+    * Converting the Eloquent object to a standard format
+    * 
+    * @param mixed $pokemon
+    * @return stdClass
+    */
+    protected function convertFormat($pokemon)
+    {
+        if ($pokemon == null)
+        {
+            return null;
+        }
+        
+        $object = new stdClass();
+        $object->id = $pokemon->id;
+        $object->name = $pokemon->name;
+        
+        return $object;
     }
 }
